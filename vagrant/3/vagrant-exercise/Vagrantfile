@@ -1,0 +1,31 @@
+
+Vagrant.configure("2") do |config|
+
+
+  config.vm.define "ubuntu" do |u|
+	u.vm.box = "ubuntu/bionic64" 
+	u.vm.network :forwarded_port, guest: 80, host: 8080
+	u.vm.network "private_network", ip: "192.168.50.4"
+	u.vm.provision :shell, :inline => "apt-get update && apt-get install -y nginx"
+	u.vm.provision :shell, :inline => "sudo echo '192.168.50.5 debian' >> /etc/hosts"
+  	u.vm.provision :shell, :inline => "ln -s /vagrant /var/www/html/demo"
+
+    u.vm.provider "virtualbox" do |v|
+      v.memory = 1024
+      v.cpus = 2
+    end
+  end
+
+  config.vm.define "debian" do |d|
+	d.vm.box = "generic/debian10"
+	d.vm.network "private_network", ip: "192.168.50.5"
+	d.vm.provision :shell, :inline => "sudo echo '192.168.50.4 ubuntu' >> /etc/hosts"
+
+	d.vm.provider "virtualbox" do |v|
+      v.memory = 1024
+      v.cpus = 1
+    end
+  end
+
+  
+end

@@ -1,0 +1,1 @@
+2019/11/12 15:22:50 [emerg] 8#8: open() "/run/nginx/nginx.pid" failed (2: No such file or directory)
